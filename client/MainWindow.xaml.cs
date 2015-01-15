@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace client
 {
@@ -24,11 +25,22 @@ namespace client
     {
         private Socket server, client;
         private IPEndPoint ipEnd;
+        Thread recvThread;
         byte[] recv;
         int i;
+
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        ~MainWindow()
+        {
+            if (recvThread != null)
+            {
+                recvThread.Abort();
+                recvThread.Join();
+            }
         }
 
         private void Connect_Click(object sender, RoutedEventArgs e)
@@ -45,7 +57,11 @@ namespace client
                 MessageBox.Show(ex.Message);
                 return;
             }
-            //while(true)
+            Send.IsEnabled = true;
+            recvThread = new Thread(RecvThread);
+            recvThread.IsBackground = true;
+            recvThread.Start();
+            /*while(true)
             {
                 try
                 {
@@ -57,10 +73,27 @@ namespace client
                     return;
                 }
                 ReceiveBox.AppendText( Encoding.UTF8.GetString(recv,0,i)+"\n");
+            }*/
+        }
+
+        private void RecvThread()
+        {
+            while(true)
+            {
+                try
+                {
+                    i = server.Receive(recv);
+                }
+                catch (SocketException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    return;
+                }
+                this.Dispatcher.BeginInvoke(new Action(() => ReceiveBox.AppendText(Encoding.UTF8.GetString(recv, 0, i))));
             }
         }
 
-        private void Send(object sender, RoutedEventArgs e)
+        private void Send_Click(object sender, RoutedEventArgs e)
         {
             server.Send(Encoding.ASCII.GetBytes(SendBox.Text));
         }

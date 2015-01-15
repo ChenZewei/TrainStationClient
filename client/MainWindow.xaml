@@ -25,8 +25,8 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Name="SendBox" Margin="20"/>
-            <Button Grid.Column="1" Name="Send" Margin="20,50" Click="Send"/>
+            <TextBox Grid.Column="0" Name="SendBox"  Margin="20" TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.CanContentScroll="True" VerticalScrollBarVisibility="Visible"/>
+            <Button Grid.Column="1" Name="Send" Content="Send" Margin="20,50" Click="Send_Click" IsEnabled="False"/>
         </Grid>
     </Grid>
 </Window>
