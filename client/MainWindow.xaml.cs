@@ -56,8 +56,13 @@ namespace client
                     MessageBox.Show(ex.Message);
                     return;
                 }
-                Result.AppendText( Encoding.UTF8.GetString(recv,0,i)+"\n");
+                ReceiveBox.AppendText( Encoding.UTF8.GetString(recv,0,i)+"\n");
             }
+        }
+
+        private void Send(object sender, RoutedEventArgs e)
+        {
+            server.Send(Encoding.ASCII.GetBytes(SendBox.Text));
         }
     }
 }

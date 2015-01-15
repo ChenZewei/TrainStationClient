@@ -6,6 +6,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
@@ -17,7 +18,15 @@
             <Button Grid.Column="1" Name="Connect" Width="100" Height="30" Content="Connect" Click="Connect_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
         <Grid Grid.Row="1">
-            <TextBox Name="Result" Margin="20"/>
+            <TextBox Name="ReceiveBox" Margin="20"/>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Name="SendBox" Margin="20"/>
+            <Button Grid.Column="1" Name="Send" Margin="20,50" Click="Send"/>
         </Grid>
     </Grid>
 </Window>
