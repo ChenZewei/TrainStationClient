@@ -26,7 +26,6 @@ namespace client
         private Socket server, client;
         private IPEndPoint ipEnd;
         Thread recvThread;
-        byte[] recv;
         int i;
 
         public MainWindow()
@@ -45,7 +44,6 @@ namespace client
 
         private void Connect_Click(object sender, RoutedEventArgs e)
         {
-            recv = new byte[200];
             ipEnd = new IPEndPoint(IPAddress.Parse(IP.Text), 15000);
             server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try
@@ -78,24 +76,31 @@ namespace client
 
         private void RecvThread()
         {
-            while(true)
+            byte[] recv;
+            recv = new byte[2048];
+            try
             {
-                try
-                {
-                    i = server.Receive(recv);
-                }
-                catch (SocketException ex)
-                {
-                    MessageBox.Show(ex.Message);
-                    return;
-                }
-                this.Dispatcher.BeginInvoke(new Action(() => ReceiveBox.AppendText(Encoding.UTF8.GetString(recv, 0, i))));
+                i = server.Receive(recv);
             }
+            catch (SocketException ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+            this.Dispatcher.BeginInvoke(new Action(() => ReceiveBox.AppendText(Encoding.UTF8.GetString(recv, 0, i))));
         }
 
         private void Send_Click(object sender, RoutedEventArgs e)
         {
-            server.Send(Encoding.ASCII.GetBytes(SendBox.Text));
+            try
+            {
+                server.Send(Encoding.ASCII.GetBytes(SendBox.Text));
+            }
+            catch(SocketException ex)
+            {
+                ReceiveBox.AppendText("Please connect server!\r\n");
+                Console.Write(ex.Message);
+            }
         }
     }
 }
