@@ -94,7 +94,7 @@ namespace client
         {
             try
             {
-                server.Send(Encoding.ASCII.GetBytes(SendBox.Text));
+                server.Send(Encoding.UTF8.GetBytes(SendBox.Text));
             }
             catch(SocketException ex)
             {
