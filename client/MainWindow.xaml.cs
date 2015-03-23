@@ -78,23 +78,27 @@ namespace client
         {
             byte[] recv;
             recv = new byte[2048];
-            try
+            while(true)
             {
-                i = server.Receive(recv);
+                try
+                {
+                    i = server.Receive(recv);
+                }
+                catch (SocketException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    return;
+                }
+                this.Dispatcher.BeginInvoke(new Action(() => ReceiveBox.AppendText(Encoding.GetEncoding("GB2312").GetString(recv, 0, i))));
             }
-            catch (SocketException ex)
-            {
-                MessageBox.Show(ex.Message);
-                return;
-            }
-            this.Dispatcher.BeginInvoke(new Action(() => ReceiveBox.AppendText(Encoding.GetEncoding("GB2312").GetString(recv, 0, i))));
+            
         }
 
         private void Send_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                server.Send(Encoding.UTF8.GetBytes(SendBox.Text));
+                server.Send(Encoding.GetEncoding("GB2312").GetBytes(SendBox.Text));
             }
             catch(SocketException ex)
             {
