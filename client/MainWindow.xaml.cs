@@ -98,7 +98,8 @@ namespace client
         {
             try
             {
-                server.Send(Encoding.GetEncoding("GB2312").GetBytes(SendBox.Text));
+                for (int i = 0; i < 5; i++ )
+                    server.Send(Encoding.GetEncoding("GB2312").GetBytes(SendBox.Text));
             }
             catch(SocketException ex)
             {
