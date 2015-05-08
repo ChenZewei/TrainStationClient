@@ -96,9 +96,10 @@ namespace client
 
         private void Send_Click(object sender, RoutedEventArgs e)
         {
+            int count = int.Parse(Count.Text);
             try
             {
-                for (int i = 0; i < 100; i++ )
+                for (int i = 0; i < count; i++)
                     server.Send(Encoding.GetEncoding("GB2312").GetBytes(SendBox.Text));
             }
             catch(SocketException ex)
